@@ -22,7 +22,6 @@ function connector (create, emitter) {
   function emit(args) {
     EventEmitter.prototype.emit.apply(emitter, args)
   }
-  if(!emitter.meter)
   emitter.meter = setInterval(function () {
       emit(['flow', sent, received])
       sent = received = 0
@@ -38,6 +37,7 @@ function connector (create, emitter) {
     emit(JSON.parse(data.data))
   }
   ws.onclose = function () {
+    clearTimeout(emitter.meter)
     emitter.connected = false
     emit(['disconnect']) 
     //remove listeners
