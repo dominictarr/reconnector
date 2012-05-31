@@ -1,6 +1,6 @@
 {
   "name": "reconnector",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "compatibility layer aroung other websocket compatibility layers",
   "homepage": "http://github.com/dominictarr/reconnector",
   "repository": {
