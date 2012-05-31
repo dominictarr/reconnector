@@ -22,10 +22,11 @@ function connector (create, emitter) {
   function emit(args) {
     EventEmitter.prototype.emit.apply(emitter, args)
   }
-  setInterval(function () {
-    emit(['flow', sent, received])
-    sent = received = 0
-  }, 1000)
+  if(!emitter.meter)
+  emitter.meter = setInterval(function () {
+      emit(['flow', sent, received])
+      sent = received = 0
+    }, 1000)
   emitter.socket = ws
   emitter.emit = function () {
     var mess = JSON.stringify([].slice.call(arguments))+'\n'  
