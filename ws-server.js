@@ -3,6 +3,7 @@
   adapt the server end of a websocket emulator
   to EventEmitter style.
 */
+
 var EventEmitter = require('events').EventEmitter
 
 module.exports = function (ws) {
@@ -14,6 +15,10 @@ module.exports = function (ws) {
     var args = [].slice.call(arguments)
     ws.write(JSON.stringify(args))
   }
+  emitter.disconnect = function () {
+    //the server does not require reconnections
+    ws.close()
+  }
   function onData (data) {
     emit(JSON.parse(data))
   }
@@ -22,5 +27,7 @@ module.exports = function (ws) {
   ws.on('close', function () {
     emit(['disconnect'])
   }) 
+  emitter.socket = ws
+  emitter.id = ws.id
   return emitter
 }

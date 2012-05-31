@@ -16,6 +16,7 @@ function connector (create, emitter) {
     console.log('emit', args)
     EventEmitter.prototype.emit.apply(emitter, args)
   }
+  emitter.socket = ws
   emitter.emit = function () {
     var mess = JSON.stringify([].slice.call(arguments))+'\n'  
     if(emitter.connected) ws.send(mess)
@@ -29,8 +30,9 @@ function connector (create, emitter) {
     emitter.connected = false
     emit(['disconnect']) 
     //remove listeners
+    console.log('DISCONNECT')
     if(emitter.reconnect) autoreconnect()
-    sock.onmessage = sock.onclose = sock.onopen = null
+    ws.onmessage = ws.onclose = ws.onopen = null
   }
   ws.onopen = function () {
     emit(['connect'])
@@ -58,7 +60,7 @@ function connector (create, emitter) {
     emit(['reconnecting', timeout])
   }
   emitter.disconnect = function () {
-    sock.close()
+    ws.close()
     emitter.connected = false
     return this
   }

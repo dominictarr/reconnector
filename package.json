@@ -1,10 +1,17 @@
-{ "name": "reconnector"
-, "version": "0.0.0"
-, "description": ""
-, "homepage": "http://github.com/dominictarr/reconnector"
-, "repository": 
-  { "type": "git"
-  , "url": "https://github.com/dominictarr/reconnector.git" }
-, "dependencies": {}
-, "devDependencies": {}
-, "author": "Dominic Tarr <dominic.tarr@gmail.com> (dominictarr.com)" }
+{
+  "name": "reconnector",
+  "version": "0.0.0",
+  "description": "",
+  "homepage": "http://github.com/dominictarr/reconnector",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dominictarr/reconnector.git"
+  },
+  "dependencies": {
+    "sockjs": "~0.3.1",
+    "connect": "~2.3.0",
+    "browserify": "~1.11.1"
+  },
+  "devDependencies": {},
+  "author": "Dominic Tarr <dominic.tarr@gmail.com> (dominictarr.com)"
+}
