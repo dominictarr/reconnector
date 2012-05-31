@@ -1,6 +1,6 @@
 {
   "name": "reconnector",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "",
   "homepage": "http://github.com/dominictarr/reconnector",
   "repository": {
@@ -12,6 +12,8 @@
     "connect": "~2.3.0",
     "browserify": "~1.11.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+
+  },
   "author": "Dominic Tarr <dominic.tarr@gmail.com> (dominictarr.com)"
 }
