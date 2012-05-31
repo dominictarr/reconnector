@@ -10,9 +10,7 @@ console.log = function () {
   log.apply(console, args) 
 }
 
-var emitter = reconnector(function () {
-    return new SockJS('/smooth')
-  })
+var emitter = reconnector()
 
 emitter.on('ping', function (sent) {
   var d = Date.now()
@@ -20,8 +18,9 @@ emitter.on('ping', function (sent) {
   emitter.emit('pong', d, d - sent)
 })
 .on('restartif', function (instance) {
-  console.log('RESTARTIF', instance, '!==', INSTANCE, instance !== INSTANCE)
-  if(INSTANCE !== instance)
+  var ts =  RECONNECTOR.timestamp
+  console.log('RESTARTIF', instance, '!==', ts, instance !== ts)
+  if(ts !== instance)
     location.reload()
 })
 .on('disconnectrequest', function (password) {
