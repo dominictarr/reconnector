@@ -4,6 +4,8 @@
 */
 
 var spawn = require('child_process').spawn
+var skates = require('skates')
+var connect = require('connect')
 var port = ~~(Math.random()*40000) + 1000
 var assert = require('assert')
 var tests = 0
@@ -15,7 +17,7 @@ function end () {
 }
 
 var connections = 0
-var app = createServer()
+var app = skates()
   .use(connect.static('public'))
   .on('connection', function (emitter) {
     var pings = 0, pongs = 0

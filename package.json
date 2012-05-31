@@ -8,11 +8,10 @@
     "url": "https://github.com/dominictarr/reconnector.git"
   },
   "dependencies": {
-    "sockjs": "~0.3.1"
   },
   "devDependencies": {
     "connect": "~2.3.0",
-    "browserify": "~1.11.1" 
+    "skates": "0"
   },
   "browserify": "./client.js",
   "author": "Dominic Tarr <dominic.tarr@gmail.com> (dominictarr.com)"
