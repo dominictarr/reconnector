@@ -7,11 +7,6 @@ var EventEmitter = require('events').EventEmitter
 module.exports = connector
 function connector (create, emitter) {
   //hmm, move this out into your own?
-  if(!create) {
-    if(!window.RECONNECTOR)
-      throw new Error('reconnector expects create function, or reconnect global')
-    create = RECONNECTOR.create
-  }
   var ws = this._ws = create()
   var min = 500, max = 60e3
   emitter = emitter || new EventEmitter()
@@ -19,7 +14,6 @@ function connector (create, emitter) {
   emitter.timeout = emitter.timeout || min
   emitter.reconnect = true
   function emit(args) {
-    console.log('emit', args)
     EventEmitter.prototype.emit.apply(emitter, args)
   }
   emitter.socket = ws
@@ -29,14 +23,12 @@ function connector (create, emitter) {
     else                  buffer.push(mess)
   }
   ws.onmessage = function (data) {
-    console.log('message', data, data.data)
     emit(JSON.parse(data.data))
   }
   ws.onclose = function () {
     emitter.connected = false
     emit(['disconnect']) 
     //remove listeners
-    console.log('DISCONNECT')
     if(emitter.reconnect) autoreconnect()
     ws.onmessage = ws.onclose = ws.onopen = null
   }
@@ -62,7 +54,6 @@ function connector (create, emitter) {
     clearTimeout(emitter._timer)
     connector(create, emitter)
     timeout = min
-    console.log('FORCE RECONNECT')
     emit(['reconnecting', timeout])
   }
   emitter.disconnect = function () {
