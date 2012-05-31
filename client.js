@@ -9,20 +9,31 @@ function connector (create, emitter) {
   //hmm, move this out into your own?
   var ws = this._ws = create()
   var min = 500, max = 60e3
+  var sent = 0, received = 0
+
   emitter = emitter || new EventEmitter()
   var buffer = emitter._buffer = emitter._buffer || []
   emitter.timeout = emitter.timeout || min
   emitter.reconnect = true
+  function send(mess) {
+    ws.send(mess)
+    sent ++
+  }
   function emit(args) {
     EventEmitter.prototype.emit.apply(emitter, args)
   }
+  setInterval(function () {
+    emit(['flow', sent, received])
+    sent = received = 0
+  }, 1000)
   emitter.socket = ws
   emitter.emit = function () {
     var mess = JSON.stringify([].slice.call(arguments))+'\n'  
-    if(emitter.connected) ws.send(mess)
+    if(emitter.connected) send(mess)
     else                  buffer.push(mess)
   }
   ws.onmessage = function (data) {
+    received ++
     emit(JSON.parse(data.data))
   }
   ws.onclose = function () {
@@ -36,8 +47,7 @@ function connector (create, emitter) {
     emit(['connect'])
     emitter.connected = true
     timeout = min
-    while(buffer.length)
-      ws.send(buffer.shift()) 
+    while(buffer.length) send(buffer.shift()) 
   } 
   function autoreconnect () {
     emitter._timer = setTimeout (function () {
