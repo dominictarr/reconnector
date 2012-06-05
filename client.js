@@ -12,6 +12,7 @@ function connector (create, emitter) {
   var sent = 0, received = 0
 
   emitter = emitter || new EventEmitter()
+  emitter.connecting = true
   var buffer = emitter._buffer = emitter._buffer || []
   emitter.timeout = emitter.timeout || min
   emitter.reconnect = true
@@ -39,6 +40,7 @@ function connector (create, emitter) {
   ws.onclose = function () {
     clearTimeout(emitter.meter)
     emitter.connected = false
+    emitter.connecting = false
     emit(['disconnect']) 
     //remove listeners
     if(emitter.reconnect) autoreconnect()
@@ -47,6 +49,7 @@ function connector (create, emitter) {
   ws.onopen = function () {
     emit(['connect'])
     emitter.connected = true
+    emitter.connecting = false
     timeout = min
     while(buffer.length) send(buffer.shift()) 
   } 
@@ -61,7 +64,7 @@ function connector (create, emitter) {
   }
   //reconnect NOW
   emitter.connect = function () {
-    if(emitter.connected) return
+    if(emitter.connected || emitter.connecting) return
     clearTimeout(emitter._timer)
     connector(create, emitter)
     timeout = min
